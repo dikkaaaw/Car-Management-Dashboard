@@ -1,22 +1,27 @@
-const express = require("express")
-const router = require('express').Router()
-const carController = require('../controllers/carController')
-const upload = require("../middlewares/uploadImages")
+const router = require("express").Router()
+
+const carController = require("../controllers/carController")
+const dashboardController = require("../controllers/dashboardController")
+const upload = require("../middlewares/uploader")
 
 router
-  .route("/")
-  .get(carController.findAllCars)
-  .post(carController.createCar)
-
+  .route("/dashboard")
+  .get(dashboardController.dashboardPage)
 router
-  .route("/:id")
-  .get(carController.findCarById)
-  .patch(carController.updateCar)
-  .delete(carController.deleteCar)
+  .route("/create")
+  .get(dashboardController.createCarPage)
+router
+  .route("/edit/:id")
+  .get(dashboardController.editCarPage)
 
-// Rute khusus untuk mengunggah gambar
-router.post('/upload', upload.single('image'), (req, res) => {
-  const imagePath = req.file.path
-});
+router.post(
+  "/cars/add",
+  upload.single("image", carController.createNewCar)
+)
+router.post(
+  "/cars/edit/:id",
+  upload.single("image", carController.updateCar)
+)
+router.get("/cars/delete/:id", carController.deleteCar)
 
 module.exports = router

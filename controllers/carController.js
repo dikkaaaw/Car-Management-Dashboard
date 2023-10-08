@@ -1,156 +1,93 @@
-const { Car } = require("../models/index")
+const { Car } = require("../models")
+const imagekit = require("../lib/imagekit")
 
-const createCar = async (req, res) => {
-    const {name, type, image, capacity, rentPerDay, description, availableAt} = req.body
-    try {
-        const newCar = await Car.create({
-            name,
-            type,
-            image,
-            capacity,
-            rentPerDay,
-            description,
-            availableAt
-        })
+const createNewCar = async (req, res) => {
+  const { name, price, category } = req.body
+  const file = req.file
 
-        res.status(200).json({
-            status: "success",
-            data : {
-                newCar
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'failed',
-            message: err.message
-        })
-    }
+  try {
+    const split = file.originalname.split(".")
+    const extension = split[split.length - 1]
+
+    const img = await imagekit.upload({
+      file: file.buffer,
+      fileName: `IMG-${Date.now()}.${extension}`,
+    })
+
+    await Car.create({
+      name,
+      price,
+      category,
+      image: img.url,
+    })
+
+    req.flash("message", "Data berhasil ditambahkan!")
+    res.redirect("/dashboard")
+  } catch (err) {
+    res.status(400).json({
+      status: "failed",
+      message: err.message,
+    })
+  }
 }
 
-const findAllCars = async (req, res) => {
-    try {
-        const Cars = await Car.findAll()
-
-        res.status(200).json({
-            status: "success",
-            data : {
-                Cars
-            }
-        })
-    } catch (err) {
-        res.status(404).json({
-            status: 'failed',
-            message: err.message
-        })
-    }
-}
-
-const findCarById = async (req, res) => {
-    const id = req.params.id
-    try {
-        const Cars = await Car.findOne({
-            where: {
-                id : req.params.id
-            }
-        })
-
-        if(!Cars) {
-            return res.status(404).json({
-                status: "failed",
-                message: `Car with id ${id} not found!`
-            })
-        }
-
-        res.status(200).json({
-            status: "success",
-            message: "Data found!",
-            data : {
-                Cars
-            }
-        })
-    } catch (err) {
-        res.status(500).json({
-            status: 'failed',
-            message: err.message
-        })
-    }
-}
 const updateCar = async (req, res) => {
+  const { name, price, category } = req.body
+  const file = req.file
+
+  const split = file.originalname.split(".")
+  const extension = split[split.length - 1]
+
+  const img = await imagekit.upload({
+    file: file.buffer,
+    fileName: `IMG-${Date.now()}.${extension}`,
+  })
+
+  try {
     const id = req.params.id
-    const {name, type, image, capacity, rentPerDay, description, availableAt} = req.body
-    try {
-        const updateCar = await Car.update({
-            name,
-            type,
-            image,
-            capacity,
-            rentPerDay,
-            description,
-            availableAt
+    await Car.update(
+      {
+        name,
+        price,
+        category,
+        image: img.url,
+      },
+      {
+        where: {
+          id,
         },
-            {
-                returning: true,
-                where: {
-                    id: req.params.id,
-                }
-            },
-        );  
-
-        if(!updateCar){
-            return res.status(404).json({
-                status: 'Not found!',
-                message: "Data not found!"
-            })
-        }
-
-        res.status(200).json({
-            status: "success",
-            message: "Success update data!",
-            data: {
-                updateCar,
-            },
-        });
-    } catch (err) {
-        res.status(500).json({
-            status: "failed",
-            mesagge: err.message
-        });
-    }
-};
+      }
+    )
+    req.flash("message", "Data berhasil diupdate!")
+    res.redirect("/dashboard")
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      mesagge: err.message,
+    })
+  }
+}
 
 const deleteCar = async (req, res) => {
+  try {
     const id = req.params.id
-    try {
-        const deleteCar = await Car.destroy({
-            where: {
-                id: req.params.id,
-            }
-        });
-        
-        if(!deleteCar) {
-            return res.status(404).json({
-                status: "failed",
-                message: `Car with id ${id} not found!`
-            })
-        }
-
-        res.status(200).json({
-            status: "success",
-            message: "Success delete data!",
-        });
-        
-    } catch (err) {
-        res.status(500).json({
-            status: "failed",
-            mesagge: err.message
-        });
-    }
-};
+    await Car.destroy({
+      where: {
+        id,
+      },
+    })
+    req.flash("message", "Data berhasil dihapus!")
+    res.redirect("/dashboard")
+  } catch (err) {
+    res.status(404).json({
+      status: "failed",
+      mesagge: err.message,
+    })
+  }
+}
 
 module.exports = {
-    createCar,
-    findAllCars,
-    findCarById,
-    updateCar,
-    deleteCar
+  createNewCar,
+  updateCar,
+  deleteCar,
 }

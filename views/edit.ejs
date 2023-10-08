@@ -15,7 +15,7 @@
                         </a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="/dashboard">
                             <img src="http://localhost:3000/images/fi_truck.png" alt="">
                             <p>Cars</p>
                         </a>
@@ -95,7 +95,7 @@
                                 </h5>
                             </div>
 
-                            <form action="" method="post" enctype="">
+                            <form action="/edit/<%= car.id %>" method="post" enctype="multipart/form-data">
                                 <div class="bg__white mt-2">
                                     <div class="row">
                                         <div class="col-lg-6">
@@ -121,7 +121,9 @@
                                                 </div>
                                                 <div class="col-lg-8">
                                                     <select name="category" class="form-select" aria-label="Default select example">
-                                                        
+                                                        <option value="small" selected>Small</option>
+                                                        <option value="medium">Medium</option>
+                                                        <option value="large">Large</option>
                                                       </select>
                                                 </div>
                                             </div>
