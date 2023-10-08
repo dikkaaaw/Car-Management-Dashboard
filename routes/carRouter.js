@@ -18,10 +18,8 @@ router
   .route("/cars/add")
   .post(upload.single("image"), carController.createNewCar)
 router
-  .route("/cars/edit/:id")
+  .route("/edit/:id")
   .post(upload.single("image"), carController.updateCar)
-router
-  .route("/cars/delete/:id")
-  .post(carController.deleteCar)
+router.route("/delete/:id").post(carController.deleteCar)
 
 module.exports = router

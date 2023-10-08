@@ -5,15 +5,15 @@ const createNewCar = async (req, res) => {
   const { name, price, category } = req.body
   const file = req.file
 
+  const split = file.originalname.split(".")
+  const extension = split[split.length - 1]
+
+  const img = await imagekit.upload({
+    file: file.buffer,
+    fileName: `IMG-${Date.now()}.${extension}`,
+  })
+
   try {
-    const split = file.originalname.split(".")
-    const extension = split[split.length - 1]
-
-    const img = await imagekit.upload({
-      file: file.buffer,
-      fileName: `IMG-${Date.now()}.${extension}`,
-    })
-
     await Car.create({
       name,
       price,

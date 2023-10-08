@@ -146,7 +146,7 @@
                                                         data-id="<%= car.id %>">
                                                         <img class="pe-2" src="images/fi_trash-2.png" alt="" />Delete
                                                     </button>
-                                                    <a class="btn btn__success" href="/dashboard/edit/<%= car.id %>"
+                                                    <a class="btn btn__success" href="/edit/<%= car.id %>"
                                                         style="width: 143.5px"><img class="pe-2"
                                                             src="images/fi_edit.png" alt="" />Edit</a>
                                                 </div>
@@ -196,7 +196,7 @@
         modals.forEach((modal) => {
             modal.addEventListener('click', (e) => {
                 const id = modal.getAttribute('data-id')
-                deleteForm.action = `/cars/delete/${id}`
+                deleteForm.action = `/delete/${id}`
             })
         })
     </script>
