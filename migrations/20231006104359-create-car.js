@@ -20,8 +20,6 @@ module.exports = {
       },
       image: {
         type: Sequelize.TEXT,
-        defaultValue:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
       },
       createdAt: {
         allowNull: false,

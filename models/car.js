@@ -16,11 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       name: DataTypes.STRING,
       price: DataTypes.FLOAT,
       category: DataTypes.STRING,
-      image: {
-        type: DataTypes.TEXT,
-        defaultValue:
-          "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Placeholder_view_vector.svg/310px-Placeholder_view_vector.svg.png",
-      },
+      image: DataTypes.TEXT,
     },
     {
       sequelize,

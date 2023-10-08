@@ -14,14 +14,14 @@ router
   .route("/edit/:id")
   .get(dashboardController.editCarPage)
 
-router.post(
-  "/cars/add",
-  upload.single("image", carController.createNewCar)
-)
-router.post(
-  "/cars/edit/:id",
-  upload.single("image", carController.updateCar)
-)
-router.get("/cars/delete/:id", carController.deleteCar)
+router
+  .route("/cars/add")
+  .post(upload.single("image"), carController.createNewCar)
+router
+  .route("/cars/edit/:id")
+  .post(upload.single("image"), carController.updateCar)
+router
+  .route("/cars/delete/:id")
+  .post(carController.deleteCar)
 
 module.exports = router
